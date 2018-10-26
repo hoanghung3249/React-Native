@@ -18,8 +18,7 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
 
   constructor(props) {
     super(props);
@@ -29,7 +28,12 @@ export default class App extends Component<Props> {
 
   //Function to handle text change
   _handleTextChange = event => {
+    const zip = event.nativeEvent.text
     this.setState({zip: event.nativeEvent.text});
+    OpenWeatherMap.fetchForecast(zip).then(forecast => {
+      console.log(forecast)
+      this.setState({forecast: forecast})
+    })
   };
 
   render() {
@@ -48,6 +52,7 @@ export default class App extends Component<Props> {
       <Text style = {styles.welcome}>
         Your input {this.state.zip}
       </Text>
+      {content}
       <TextInput style={styles.input} 
       onSubmitEditing ={this._handleTextChange}
       />
@@ -61,7 +66,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#666666',
   },
   welcome: {
     fontSize: 20,
